@@ -3,6 +3,35 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
+## Project Description
+
+The purpose of this project was to :
+1. Build a PID controller and tune the PID hyperparameters by applying the general processing flow as described in the previous lessons
+2. Test the solution on the simulator
+
+
+---
+
+## Reflections
+
+Following points describe the effect of each of the P, I, D components that I could explore.
+
+* The P (proportional) : Affect the most the car's behavior since it causes the car to steer proportional to the car's distance from the lane center.
+
+* The D (differential) : Prevents the P component's from overshooting the center line. This parameter helps smooth the way the car approach the center.
+
+* The I (integral) : Aggregation of the errors cumulated along time. Since some systematic bias may exist when applying corrections the aggregation may point out how the bias is contributing to the error generation and help reducing it by applying the correct correction.
+
+I had started to optimize at 40 mph and to optimize for all the track. The measure used for evaluating the fitness of the coefficients has been the mean squared CTE, a measure that penalizes the presence of high CTE reported during the track.
+
+The hyperparameters were tuned manually because the track left little room for error, and when attempting to automate parameter optimization (such as Twiddle) it was very frequent for the car to leave the track. Once I found parameters that were able to get the car around the track, I was able to add the Twiddle algorithm.
+
+Finally, when Twiddle correctly changed the coefficients, I increased the search intervals by 10%
+
+Overall, the results were not that satisfactory to me but yes had been good learning expereince. 
+
+---
+
 ## Dependencies
 
 * cmake >= 3.5
@@ -26,7 +55,7 @@ Self-Driving Car Engineer Nanodegree Program
     Some function signatures have changed in v0.14.x. See [this PR](https://github.com/udacity/CarND-MPC-Project/pull/3) for more details.
 * Simulator. You can download these from the [project intro page](https://github.com/udacity/self-driving-car-sim/releases) in the classroom.
 
-Fellow students have put together a guide to Windows set-up for the project [here](https://s3-us-west-1.amazonaws.com/udacity-selfdrivingcar/files/Kidnapped_Vehicle_Windows_Setup.pdf) if the environment you have set up for the Sensor Fusion projects does not work for this project. There's also an experimental patch for windows in this [PR](https://github.com/udacity/CarND-PID-Control-Project/pull/3).
+There's an experimental patch for windows in this [PR](https://github.com/udacity/CarND-PID-Control-Project/pull/3)
 
 ## Basic Build Instructions
 
