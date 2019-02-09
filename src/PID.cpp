@@ -1,30 +1,53 @@
 #include "PID.h"
+#include <iostream>
+#include <math.h>
 
-/**
- * TODO: Complete the PID class. You may add any additional desired functions.
- */
+using namespace std;
+
+/*
+* TODO: Complete the PID class.
+*/
 
 PID::PID() {}
 
 PID::~PID() {}
 
-void PID::Init(double Kp_, double Ki_, double Kd_) {
-  /**
-   * TODO: Initialize PID coefficients (and errors, if needed)
-   */
+void PID::Init(double Kp, double Ki, double Kd) {
+  p_error = 0.0;
+  i_error = 0.0;
+  d_error = 0.0;
+  previous_cte_= 0.0;
+  total_squared_error = 0.0;
+  cumulative_abs_error = 0.0;
+  count = 0.0;
 
+  /*
+  * Initializing coefficients
+  */
+  PID::Kp = Kp; // Proportional coefficient
+  PID::Ki = Ki; // Integral coefficient
+  PID::Kd = Kd; // Differential coefficient
 }
 
 void PID::UpdateError(double cte) {
-  /**
-   * TODO: Update PID errors based on cte.
-   */
-
+	// counting the number of updates for the MSE
+	count += 1;
+	// cumulating the squared error
+	total_squared_error += p_error * p_error;
+	// cumulating the absolute error
+	cumulative_abs_error += fabs(cte);
+    p_error = cte; // proportional cte
+    d_error = cte - previous_cte_; // differential cte
+	// When there is no previous cte, d_error_ is set to cte
+    i_error += cte; // integral cte
+	// Storing away the present cte
+    previous_cte_ = cte;
+	// DEBUG: outputting parameters and errors
+	cout << "p: " << p_error << " d: " << d_error << " i: " << i_error << " MSE: " << total_squared_error / count << " CAE: " << cumulative_abs_error << endl;
 }
 
 double PID::TotalError() {
-  /**
-   * TODO: Calculate and return the total error
-   */
-  return 0.0;  // TODO: Add your total error calc here!
+	// Computing the total error (to be used for correction)
+    return Kp * p_error + Kd * d_error + Ki * i_error;
 }
+
